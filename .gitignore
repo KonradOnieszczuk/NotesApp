@@ -1,5 +1,8 @@
-#IntelliJ
-.idea
+# IntelliJ
+.idea/
+
+# Bundle.js
+dist/bundle.js
 
 # Logs
 logs
