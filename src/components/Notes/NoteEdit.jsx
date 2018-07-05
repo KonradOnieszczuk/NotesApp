@@ -87,6 +87,10 @@ class NoteEdit extends Component {
                                 <input id="title" name="title" type="text"
                                        value={note.title || ''} onChange={this._change('title')} />
                             </FormField>
+                            <FormField label="Category" htmlFor="category">
+                                <input id="category" name="category" type="text"
+                                       value={note.category || ''} onChange={this._change('category')} />
+                            </FormField>
                             <FormField label="Content" htmlFor="content">
                                 <input id="content" name="content" type="text"
                                        value={note.content || ''} onChange={this._change('content')} />

@@ -23,10 +23,13 @@ class Notes extends React.Component {
         if (notes) {
             items = notes.map((item, _) => (
                 <Tile align="center" separator="all" pad='small' justify="between"
-                      size="small">
+                      size="medium" colorIndex={item.color}>
                     <Box align="center">
-                        <Heading tag="h3" align="center" strong={true}>
+                        <Heading tag="h2" align="center" strong={true}>
                             {item.title}
+                        </Heading>
+                        <Heading tag="h3" align="center" uppercase={true}>
+                        {item.category}
                         </Heading>
                         <div>{item.content}</div>
                         <div>{item.date}</div>
@@ -40,7 +43,7 @@ class Notes extends React.Component {
 
         return (
             <Box>
-                <Header size='large' pad={{ horizontal: 'medium' }}>
+                <Header size='medium' pad={{ horizontal: 'medium' }}>
                     <Title responsive={false}>
                         <NavControl />
                         <span>Notes</span>

@@ -21,7 +21,7 @@ class NoteAdd extends Component {
         this._onSubmit = this._onSubmit.bind(this);
         this.state = {
             removing: false,
-            note: {id: 69, title: 'Sample', content: 'Sample sample sample', date: '7/5/2018 2:00 am'}
+            note: {id: 69, title: 'Sample', category: 'Sample Category', content: 'Sample sample sample', date: '7/5/2018 2:00 am', color: ''}
 
         };
     }
@@ -63,9 +63,13 @@ class NoteAdd extends Component {
                                 <input id="title" name="title" type="text"
                                        value={note.title || ''} onChange={this._change('title')} />
                             </FormField>
+                            <FormField label="Category" htmlFor="category">
+                                <input id="category" name="category" type="text"
+                                       value={note.category || ''} onChange={this._change('category')} />
+                            </FormField>
                             <FormField label="Content" htmlFor="content">
-                                <input id="content" name="content" type="text"
-                                       value={note.content || ''} onChange={this._change('content')} />
+                            <input id="content" name="content" type="text"
+                                   value={note.content || ''} onChange={this._change('content')} />
                             </FormField>
                             <FormField label="Date" htmlFor="date">
                                 <DateTime id="date" name="date"

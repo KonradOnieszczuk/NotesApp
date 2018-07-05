@@ -5,6 +5,8 @@ const initialState = {
   active: true,
   items: [
     { path: '/', label: 'Notes' },
+    { path: '/calendar', label: 'Calendar' },
+    { path: '/archive', label: 'Archive' },
   ],
 };
 
