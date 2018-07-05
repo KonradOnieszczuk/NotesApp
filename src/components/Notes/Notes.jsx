@@ -8,12 +8,21 @@ import Tile from 'grommet/components/Tile';
 import Tiles from 'grommet/components/Tiles';
 import Search from 'grommet/components/Search';
 import {Anchor} from "grommet";
+import FilterControl from 'grommet-addons/components/FilterControl';
+import Sidebar from 'grommet/components/Sidebar';
+import Section from 'grommet/components/Section';
+import Layer from 'grommet/components/Layer';
+import Button from 'grommet/components/Button';
+import Sort from 'grommet-addons/components/Sort';
+import _ from 'lodash'
 
 import NavControl from '../NavControl';
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import EditIcon from 'grommet/components/icons/base/Edit';
 import ViewIcon from 'grommet/components/icons/base/View';
+import CloseIcon from 'grommet/components/icons/base/Close';
+
 
 
 class Notes extends React.Component {
@@ -21,7 +30,10 @@ class Notes extends React.Component {
     constructor (props) {
         super(props);
         this._onSearch = this._onSearch.bind(this);
-        this.state = { notes:this.props.notes, searchNotes: this.props.notes, searchText: '' };
+        this._onFilterActivate = this._onFilterActivate.bind(this);
+        this._onFilterDeactivate = this._onFilterDeactivate.bind(this);
+        this._onChangeSort = this._onChangeSort.bind(this);
+        this.state = { notes:this.props.notes, searchNotes: this.props.notes, searchText: '', sort: ':' };
     }
 
     _onSearch (event) {
@@ -30,8 +42,22 @@ class Notes extends React.Component {
         this.state.searchNotes = this.state.notes.filter(item => item.title.includes(searchText));
     }
 
+    _onChangeSort (sort) {
+        this.state.sort = `${sort.value}:${sort.direction}`;
+        this.state.searchNotes = _.orderBy(this.state.searchNotes, sort.value, sort.direction)
+        this.setState({ filterActive: false });
+    }
+
+    _onFilterActivate () {
+        this.setState({ filterActive: true });
+    }
+
+    _onFilterDeactivate () {
+        this.setState({ filterActive: false });
+    }
+
     render() {
-        const { searchNotes, searchText } = this.state;
+        const { searchNotes, searchText, filterActive } = this.state;
         let items;
 
         if (searchNotes) {
@@ -58,6 +84,37 @@ class Notes extends React.Component {
             ));
         }
 
+        let filterLayer;
+        if (filterActive) {
+            let sortProperty, sortDirection;
+            if (this.state.sort) {
+                [ sortProperty, sortDirection ] = this.state.sort.split(':');
+            }
+            filterLayer =  <Layer align='right' flush={true} closer={false}
+                                      a11yTitle='Virtual Machines Filter'>
+                 <Sidebar size='large'>
+                    <div>
+                        <Header size='large' justify='between' align='center'
+                                pad={{ horizontal: 'medium', vertical: 'medium' }}>
+                            <Heading tag='h2' margin='none'>Filter</Heading>
+                            <Button icon={<CloseIcon />} plain={true}
+                                    onClick={this._onFilterDeactivate} />
+                        </Header>
+                        <Section pad={{ horizontal: 'large', vertical: 'small' }}>
+                            <Heading tag='h3'>Sort</Heading>
+                            <Sort options={[
+                                { label: 'Title', value: 'title', direction: 'asc' },
+                                { label: 'Category', value: 'category', direction: 'asc' },
+                                { label: 'Date', value: 'date', direction: 'desc' },
+                            ]} value={sortProperty} direction={sortDirection}
+                                  onChange={this._onChangeSort}
+                            />
+                        </Section>
+                    </div>
+                </Sidebar>
+            </Layer>;
+        }
+
         return (
             <Box>
                 <Header size='medium' pad={{ horizontal: 'medium' }}>
@@ -67,6 +124,7 @@ class Notes extends React.Component {
                     </Title>
                     <Search inline={true} fill={true} size='medium' placeHolder='Search'
                             value={searchText} onDOMChange={this._onSearch} />
+                    <FilterControl onClick={this._onFilterActivate}/>
                 </Header>
                 <Tiles flush={false} fill={false}>
                     {items}
@@ -74,6 +132,7 @@ class Notes extends React.Component {
                 <Anchor icon={<Pulse />}
                         path='/add'
                         a11yTitle={`Add note`} />
+                {filterLayer}
             </Box>
         );
     }

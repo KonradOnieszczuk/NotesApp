@@ -10,7 +10,9 @@
   "dependencies": {
     "express": "^4.16.3",
     "grommet": "^1.10.1",
+    "grommet-addons": "^0.6.0",
     "grommet-templates": "^0.2.0",
+    "lodash": "^4.17.10",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
